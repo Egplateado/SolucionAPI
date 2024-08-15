@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Data
 {
@@ -38,14 +39,20 @@ namespace Data
                     //Mientras haya mas filas
                     while (reader.Read())
                     {
+                        //Convertir el json de Departamento a su objeto
+                        var departamentoString = reader["Departamento"].ToString();
+
                         ListaEmpleado.Add(new Empleado
                         {
                             Id = Convert.ToInt32(reader["Id"]),
                             NombreCompleto = Convert.ToString(reader["NombreCompleto"]),
                             Sueldo = Convert.ToDecimal(reader["Sueldo"]),
                             FechaContrato = (DateTime)reader["FechaContrato"],
-                            Departamento = (Departamento)reader["Departamento"]
-
+                            Departamento = JsonConvert.DeserializeObject<Departamento>(departamentoString)
+                            //Departamento = new Departamento
+                            //{
+                            //    Nombre = reader["Departamento"].ToString()
+                            //}
                         });
                     }
                 }
@@ -56,7 +63,7 @@ namespace Data
 
         public async Task<bool> InsertarEmpleado(Empleado empleado)
         {
-         
+
             using (var conexion = new SqlConnection(conexiones.CadenaSQL))
             {
                 //Abrir conexion a la base de datos
@@ -124,7 +131,7 @@ namespace Data
                 SqlCommand cmd = new SqlCommand("sp_EliminarEmpleado", conexion);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Id", Id);
-               
+
                 //utiliza el bloque try-catch para iniciar la operacion de insertar
                 try
                 {
