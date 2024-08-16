@@ -61,13 +61,13 @@ namespace Data
             return ListaEmpleado;
         }
 
-        public async Task<bool> InsertarEmpleado(Empleado empleado)
+        public async Task<bool> InsertarEmpleado(EmpleadoDTO empleado)
         {
 
             using (var conexion = new SqlConnection(conexiones.CadenaSQL))
             {
                 //Abrir conexion a la base de datos
-                await conexion.OpenAsync();
+                //await conexion.OpenAsync();
                 SqlCommand cmd = new SqlCommand("sp_InsertarEmpleado", conexion);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Nombre", empleado.NombreCompleto);
@@ -79,7 +79,6 @@ namespace Data
                 {
                     await conexion.OpenAsync();
                     respuesta = await cmd.ExecuteNonQueryAsync() > 0 ? true : false;
-
                 }
                 catch (Exception ex)
                 {
@@ -147,6 +146,18 @@ namespace Data
             return respuesta;
         }
 
+        //Clase para Insertar un nuevo Empleado
+        public class EmpleadoDTO
+        {
+            public long Id { get; set; }
+            public string NombreCompleto { get; set; }
+            public long IdDepartamento { get; set; }
+            public decimal Sueldo { get; set; }
+            public DateTime FechaContrato { get; set; }
+            public bool Eliminado { get; set; }
+            //public Departamento? Departamento { get; set; }
+
+        }
 
     }
 }

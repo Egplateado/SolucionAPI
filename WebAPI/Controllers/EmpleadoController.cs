@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Data;
 using Modelo;
+using static Data.EmpleadoData;
 
 namespace WebAPI.Controllers
 {
@@ -25,7 +26,7 @@ namespace WebAPI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Save([FromBody] Empleado empleado)
+        public async Task<IActionResult> Save([FromBody] EmpleadoDTO empleado)
         {
             bool insertar = await _empleadoData.InsertarEmpleado(empleado);
             return StatusCode(StatusCodes.Status200OK, new { isSuccess = insertar });
