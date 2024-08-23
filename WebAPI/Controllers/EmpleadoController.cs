@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Data;
 using Modelo;
 using static Data.EmpleadoData;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class EmpleadoController : ControllerBase
     {
@@ -17,7 +19,7 @@ namespace WebAPI.Controllers
             _empleadoData = empleadoData;
         }
 
-        [HttpGet]
+        [HttpGet("Getall")]
         public async Task<IActionResult> GetAll()
         {
             List<Empleado> listaEmpleado = await _empleadoData.Getall();
